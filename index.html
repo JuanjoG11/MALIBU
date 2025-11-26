@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MALIBU TATTOO </title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* 🎨 VARIABLES CYBER-NOIR */
+        :root {
+            --color-dark: #0a0a0a;
+            --color-black: #000000;
+            --color-gold: #d4af37; 
+            --color-gold-light: #f5e29e; 
+            --color-accent: #333;
+            --color-text: #e5e5e5;
+        }
+
+        /* RESET & BASE (MOBILE FIRST) */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body { 
+            background:var(--color-black); 
+            color:var(--color-text); 
+            font-family:'Montserrat', sans-serif; 
+            overflow-x:hidden;
+            border: 4px solid rgba(212,175,55,0.5); 
+            box-shadow: 0 0 20px rgba(212,175,55,0.7);
+            animation: borderGlow 5s infinite alternate; 
+            cursor: url('https://i.ibb.co/Z1NCDW3/needle.png') 5 5, auto; 
+            position: relative; 
+            font-size: 16px; /* Base para rem */
+        }
+        @keyframes borderGlow {
+            from { box-shadow: 0 0 10px rgba(212,175,55,0.4); }
+            to { box-shadow: 0 0 30px rgba(255,223,100,0.9); }
+        }
+
+        /* AMBIENTE (Smoke y Nebula) */
+        .smoke {
+            position:fixed; inset:0; background:url('https://i.ibb.co/wKJRX4x/smoke.png') repeat; 
+            opacity:0.08; animation: smokeMove 40s linear infinite; pointer-events:none; z-index:-10;
+        }
+        @keyframes smokeMove { from{background-position:0 0} to{background-position:2000px 0} }
+
+        .nebula-particle { /* Partículas de fondo */
+            position: fixed; background: radial-gradient(circle, var(--color-gold-light) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none; opacity: 0;
+            animation: nebulaFlow 20s infinite ease-in-out; z-index: -2;
+        }
+        @keyframes nebulaFlow {
+            0% { transform: translate(var(--x1), var(--y1)) scale(0); opacity: 0; }
+            50% { transform: translate(var(--x2), var(--y2)) scale(1); opacity: 0.05; }
+            100% { transform: translate(var(--x3), var(--y3)) scale(0); opacity: 0; }
+        }
+        
+        /* -------------------------- */
+        /* 🎬 LOADER CINEMÁTICO */
+        /* -------------------------- */
+        .loader-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black;
+            display: flex; justify-content: center; align-items: center; z-index: 9999;
+            animation: fadeOutScreen 1.6s forwards ease-in-out 2.8s;
+        }
+        @keyframes fadeOutScreen { from { opacity: 1; } to { opacity: 0; visibility: hidden; } }
+
+        .logo-title {
+            font-family:'Orbitron', sans-serif; font-size:2.5rem; position:relative; z-index:2;
+            white-space: nowrap; text-align: center; line-height: 1.2;
+        }
+        .logo-title span {
+            display: inline-block; opacity: 0; transform: translateY(-80px) scale(1.4);
+            color: var(--color-gold); text-shadow: 0 0 15px var(--color-gold-light), 0 0 30px var(--color-gold);
+            animation: dropLetter 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            animation-delay: calc(var(--i) * 0.15s);
+        }
+        .logo-title span.space { width: 1rem; animation: none; opacity: 1; transform: none; }
+        @keyframes dropLetter {
+            0% { opacity: 0; transform: translateY(-80px) scale(1.4); filter: blur(6px); }
+            70% { opacity: 1; transform: translateY(10px) scale(1); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+
+        .title-behind-liquid {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 250%; height: 250%; background: radial-gradient(circle, rgba(212,175,55,0.25), transparent 70%);
+            filter: blur(80px); animation: liquidGoldMove 6s infinite ease-in-out alternate; z-index: -2;
+        }
+        @keyframes liquidGoldMove {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-48%, -52%) scale(1.15); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* -------------------------- */
+        /* 🧭 MENU DE NAVEGACIÓN (Sticky) */
+        /* -------------------------- */
+        .menu {
+            position:sticky; top:0; width:100%; background:rgba(0,0,0,0.9);
+            border-bottom:1px solid var(--color-accent); backdrop-filter:blur(6px); z-index:99;
+        }
+        .menu ul {
+            list-style:none; display:flex; justify-content:center; gap:10px; padding:10px 5px; flex-wrap: wrap;
+        }
+        .menu a {
+            color:var(--color-text); text-decoration:none; font-weight:600; transition:.3s;
+            text-transform:uppercase; font-size:0.75rem; display: flex; align-items: center;
+        }
+        .menu a i { margin-right: 5px; font-size: 0.9rem; }
+        .menu a:hover { color:var(--color-gold-light); text-shadow:0 0 10px var(--color-gold); }
+
+        /* -------------------------- */
+        /* 🥇 BOTONES DORADOS METÁLICOS */
+        /* -------------------------- */
+        .gold-btn {
+            display:inline-flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #b9972f, #f5e29e, #b9972f);
+            padding: 12px 24px; color: black; font-weight: 700; border-radius: 50px;
+            border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+            background-size: 300% 300%; animation: goldMetalShift 5s infinite;
+            box-shadow: 0 0 8px rgba(255,215,0,0.7); text-decoration:none; transition: 0.3s;
+            font-size: 0.85rem; text-align: center;
+        }
+        .gold-btn i { margin-right: 8px; font-size: 1rem; }
+        .gold-btn:hover { box-shadow: 0 0 15px var(--color-gold-light); transform: scale(1.05); }
+        @keyframes goldMetalShift {
+            0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; }
+        }
+
+        /* -------------------------- */
+        /* 🌟 HERO SECTION */
+        /* -------------------------- */
+        .hero {
+            height:calc(100vh - 50px); /* Ajustado para el menú móvil */
+            display:flex; align-items:center; justify-content:center; flex-direction:column;
+            text-align:center; background:url('https://images.unsplash.com/photo-1600690870918-8c9b0e82064d') center/cover fixed;
+            position:relative; padding-top:50px; padding-bottom: 20px;
+        }
+        .hero::after { content:""; position:absolute; inset:0; background:rgba(0,0,0,0.8); z-index:1; }
+        .hero * { z-index:2; }
+        .hero h1 {
+            font-family:'Orbitron', sans-serif; font-size:2.8rem; color:var(--color-gold);
+            text-shadow:0 0 15px var(--color-gold); margin-bottom: 15px;
+        }
+        .hero p { margin-top:20px; font-size:1rem; line-height:1.5; padding:0 15px; }
+
+        /* -------------------------- */
+        /* 📢 MENSAJE DE ALERTA CTA */
+        /* -------------------------- */
+        .cta-alert {
+            background:linear-gradient(90deg, #180505, #351a00, #180505);
+            text-align:center; padding:20px 15px; font-size:1.1rem;
+            color:var(--color-gold-light); line-height: 1.4;
+            border-bottom: 3px solid var(--color-gold);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+            position: sticky; /* Sticky para que quede visible después del hero */
+            top: 50px; /* Debajo del menú */
+            z-index: 98;
+        }
+        .cta-alert strong {
+            display: block;
+            margin-top: 10px;
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px var(--color-gold);
+        }
+
+        /* -------------------------- */
+        /* 🔪 SECCIONES & TÍTULOS */
+        /* -------------------------- */
+        .section {
+            padding:60px 15px; max-width:1100px; margin:auto;
+        }
+        .section h2 {
+            text-align:center; font-family:'Orbitron'; font-size:1.8rem;
+            margin-bottom:40px; color:var(--color-gold); text-shadow:0 0 10px rgba(255,215,0,0.5);
+        }
+        .grid {
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); 
+            gap:20px;
+        }
+
+        /* -------------------------- */
+        /* 🎨 GALERÍA DE ARTE Y ESTILOS (Fusión) */
+        /* -------------------------- */
+        .art-card {
+            background:var(--color-dark); border:1px solid var(--color-accent);
+            border-radius:15px; overflow:hidden; transition:0.4s ease-out;
+            cursor:pointer; filter: brightness(0.9) blur(0.5px);
+            animation: cardReveal 1s ease forwards;
+        }
+        .art-card:hover { 
+            transform:scale(1.03); border-color:var(--color-gold); 
+            filter: brightness(1) blur(0); box-shadow:0 0 20px var(--color-gold), 0 0 5px var(--color-gold-light); 
+        }
+        .art-card img { 
+            width:100%; height:200px; object-fit:cover; 
+            filter:grayscale(100%) brightness(0.7); transition:0.4s;
+        }
+        .art-card:hover img { 
+            filter:grayscale(0%) brightness(1.1); 
+        } 
+        .art-card h3 { 
+            padding:15px; font-size:1.1rem; color:var(--color-gold-light); 
+            font-family:'Orbitron'; 
+        }
+
+        /* Otras secciones (Testimonios, Contacto) */
+        .test-card {
+            background:rgba(255,255,255,0.05); border:1px solid var(--color-accent);
+            padding:20px; border-radius:15px; backdrop-filter:blur(5px);
+            text-align:center; font-size:0.95rem; color:var(--color-text);
+            box-shadow:0 0 15px rgba(255,255,255,0.1);
+        }
+        .video-item {
+            width:100%; border-radius:15px; border:1px solid var(--color-gold);
+            background:var(--color-black); transition:.3s; box-shadow: 0 0 10px rgba(212,175,55,0.5);
+            aspect-ratio: 16/9;
+        }
+        .footer {
+            text-align:center; padding:25px; margin-top:40px; background:var(--color-dark);
+            border-top:1px solid var(--color-accent); color:#777; font-size:0.8rem;
+        }
+
+
+        /* 🖥️ MEDIA QUERIES (A partir de 768px, mejoramos la experiencia de escritorio) */
+        @media (min-width: 768px) {
+            body { font-size: 18px; }
+            .logo-title { font-size: 3.5rem; }
+            .hero { height: 90vh; }
+            .hero h1 { font-size: 3.5rem; }
+            .hero p { font-size: 1.2rem; }
+            .section h2 { font-size: 2.5rem; }
+            .menu ul { gap: 40px; padding: 15px 10px; flex-wrap: nowrap; }
+            .menu a { font-size: 0.9rem; }
+            .cta-alert { font-size: 1.4rem; top: 60px; padding: 25px 30px;}
+            .cta-alert strong { font-size: 1.6rem; }
+            .grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+            .art-card img { height: 240px; }
+            .art-card h3 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="smoke"></div>
+    <div class="nebula-particles-container"></div> 
+
+    <div class="loader-screen">
+        <div class="title-behind-liquid"></div>
+        <h1 class="logo-title">
+            <span style="--i:1;">M</span><span style="--i:2;">A</span><span style="--i:3;">L</span><span style="--i:4;">I</span><span style="--i:5;">B</span><span style="--i:6;">U</span><span class="space"></span>
+            <span style="--i:7;">T</span><span style="--i:8;">A</span><span style="--i:9;">T</span><span style="--i:10;">T</span><span style="--i:11;">O</span><span style="--i:12;">O</span>
+        </h1>
+    </div>
+
+    <nav class="menu">
+        <ul>
+            <li><a href="#hero"><i class="fas fa-home"></i> Inicio</a></li>
+            <li><a href="#galeria"><i class="fas fa-palette"></i> Galería/Estilos</a></li>
+            <li><a href="#videos"><i class="fas fa-video"></i> Videos</a></li>
+            <li><a href="#testimonios"><i class="fas fa-star"></i> Opiniones</a></li>
+            <li><a href="#contacto"><i class="fas fa-calendar-alt"></i> Contacto</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero" id="hero">
+        <h1>MALIBU TATTOO</h1>
+        <a class="gold-btn" href="https://wa.me/573001112233" target="_blank">
+            <i class="fab fa-whatsapp"></i> AGENDAR / COTIZAR (15% OFF)
+        </a>
+    </section>
+
+    <div class="cta-alert">
+        ¿Le falta tinta a tu cuerpo? 🔥 ¡Aprovecha el 15% de descuento ahora!
+        <a class="gold-btn" style="margin-top: 15px; font-size: 0.9rem;" href="https://wa.me/573001112233" target="_blank">
+            <i class="fab fa-whatsapp"></i> QUIERO MI 15%
+        </a>
+    </div>
+
+    <section class="section" id="galeria">
+        <h2>PORTAFOLIO Y ESTILOS DE ARTE</h2>
+        <div class="grid">
+            <div class="art-card"><img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb1" alt="Tatuaje Realismo"/><h3>Realismo B&N</h3></div>
+            <div class="art-card"><img src="https://images.unsplash.com/photo-1603570419967-2009d8e8c5a2" alt="Tatuaje Fine Line"/><h3>Fine Line / Minimalista</h3></div>
+            <div class="art-card"><img src="https://images.unsplash.com/photo-1519961655809-34fa156820ff" alt="Tatuaje Blackwork"/><h3>Blackwork / Geométrico</h3></div>
+            <div class="art-card"><img src="https://images.unsplash.com/photo-1598514983191-f2fc89f013dd" alt="Tatuaje de Pieza de Autor"/><h3>Pieza de Autor</h3></div>
+            <div class="art-card"><img src="https://images.unsplash.com/photo-1612976022534-3ecc7ef2d7be" alt="Tatuaje Dark Art"/><h3>Dark Art</h3></div>
+            <div class="art-card"><img src="https://images.unsplash.com/photo-1592496431122-23403f59d0e3" alt="Tatuaje Lettering"/><h3>Lettering / Caligrafía</h3></div>
+            <div class="art-card"><img src="https://images.unsplash.com/photo-1582555522448-8a2c89e5d7b5" alt="Tatuaje Sombra Fina"/><h3>Sombra Fina</h3></div>
+            <div class="art-card"><img src="https://images.unsplash.com/photo-1598515213851-83080bbfbd76" alt="Tatuaje Neo Tradicional"/><h3>Neo Tradicional / Color</h3></div>
+        </div>
+    </section>
+
+    <section class="section" id="videos">
+        <h2>PROCESOS Y DETALLES EN VIDEO</h2>
+        <div class="grid">
+            <video class="video-item" controls muted loop playsinline><source src="https://cdn.pixabay.com/video/2021/08/23/85441-593921671_large.mp4" type="video/mp4"></video>
+            <video class="video-item" controls muted loop playsinline><source src="https://cdn.pixabay.com/video/2015/03/18/1708-1145_large.mp4" type="video/mp4"></video>
+            <video class="video-item" controls muted loop playsinline><source src="https://cdn.pixabay.com/video/2020/10/13/53667-464056897_large.mp4" type="video/mp4"></video>
+        </div>
+    </section>
+
+    <section class="section" id="testimonios">
+        <h2>VOCES DE LA EXPERIENCIA MALIBU</h2>
+        <div class="grid">
+            <div class="test-card">“Excelencia en detalle y profesionalismo. **Resultado 10/10**.” — Carlos R.</div>
+            <div class="test-card">“El mejor estudio **Dark** en la ciudad. Ambiente inmejorable.” — Natalia P.</div>
+            <div class="test-card">“Sombra perfecta, línea impecable. Arte con garantía.” — Steven M.</div>
+        </div>
+    </section>
+
+    <section class="section" id="contacto">
+        <h2 style="margin-bottom:20px;">INICIA TU PROYECTO HOY</h2>
+        <p style="text-align:center; margin-bottom:40px; padding:0 15px;">Asegura tu diseño y congela tu precio con el 15% de descuento.</p>
+        <div style="text-align:center;">
+            <a class="gold-btn" href="https://wa.me/573001112233" target="_blank">
+                <i class="fab fa-whatsapp"></i> ENVIAR MENSAJE DE CITA
+            </a>
+        </div>
+    </section>
+
+    <footer class="footer">
+        MALIBU TATTOO — Estudio profesional • Estilo oscuro • Calidad garantizada. <br/>
+        © 2025 Todos los derechos reservados.
+    </footer>
+
+    <script>
+        // JS para la NEBULA DE PARTÍCULAS (fondo dinámico)
+        const nebulaContainer = document.querySelector('.nebula-particles-container');
+        if (nebulaContainer) {
+            for (let i = 0; i < 30; i++) { 
+                const particle = document.createElement('div');
+                particle.className = 'nebula-particle';
+                
+                // Posiciones aleatorias iniciales y finales para la animación
+                const x1 = Math.random() * 100 + 'vw'; const y1 = Math.random() * 100 + 'vh';
+                const x2 = Math.random() * 100 + 'vw'; const y2 = Math.random() * 100 + 'vh';
+                const x3 = Math.random() * 100 + 'vw'; const y3 = Math.random() * 100 + 'vh';
+                
+                particle.style.setProperty('--x1', x1); particle.style.setProperty('--y1', y1);
+                particle.style.setProperty('--x2', x2); particle.style.setProperty('--y2', y2);
+                particle.style.setProperty('--x3', x3); particle.style.setProperty('--y3', y3);
+                
+                // Tamaño y retraso de animación aleatorios
+                const size = Math.random() * 40 + 20 + 'px'; 
+                particle.style.width = size; particle.style.height = size;
+                particle.style.animationDelay = (Math.random() * 10) + 's'; 
+                particle.style.animationDuration = (Math.random() * 20 + 15) + 's'; 
+                
+                nebulaContainer.appendChild(particle);
+            }
+        }
+
+        // JS para el efecto de partículas doradas al pasar el ratón
+        document.addEventListener('mousemove', (e) => {
+            const particle = document.createElement('div');
+            particle.className = 'nebula-particle'; // Reutilizamos la clase de la partícula
+            particle.style.left = e.clientX + 'px';
+            particle.style.top = e.clientY + 'px';
+            particle.style.width = '8px';
+            particle.style.height = '8px';
+            particle.style.animation = 'fadeParticle 0.8s linear forwards'; 
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, 800);
+        });
+
+        // Definición de la animación fadeParticle (necesaria para el efecto del ratón)
+        const styleSheet = document.createElement("style");
+        styleSheet.type = "text/css";
+        styleSheet.innerText = `
+            @keyframes fadeParticle {
+                from { opacity: 1; transform: scale(1); }
+                to { opacity: 0; transform: scale(0.2); }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>
